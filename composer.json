@@ -44,5 +44,6 @@
         "pre-package-uninstall": [
             "support\\Plugin::uninstall"
         ]
-    }
+    },
+    "minimum-stability": "stable"
 }
