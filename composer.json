@@ -1,6 +1,5 @@
 {
     "name": "localzet/webkit",
-    "version": "v1.0.0",
     "description": "Web Development Kit",
     "type": "project",
     "keywords": [
@@ -45,6 +44,5 @@
         "pre-package-uninstall": [
             "support\\Plugin::uninstall"
         ]
-    },
-    "minimum-stability": "stable"
+    }
 }
