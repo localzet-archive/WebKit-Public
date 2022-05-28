@@ -19,7 +19,7 @@
     },
     "require": {
         "php": ">=8.1",
-        "localzet/framex": "dev-main",
+        "localzet/framex": "v1.0.0",
         "monolog/monolog": "^2.0"
     },
     "suggest": {
