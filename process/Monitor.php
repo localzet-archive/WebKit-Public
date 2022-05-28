@@ -9,8 +9,8 @@
 
 namespace process;
 
-use localzet\V3\Timer;
-use localzet\V3\Worker;
+use localzet\Core\Timer;
+use localzet\Core\Server;
 
 /**
  * Class FileMonitor
@@ -38,14 +38,14 @@ class Monitor
     {
         $this->_paths = (array)$monitor_dir;
         $this->_extensions = $monitor_extensions;
-        if (!Worker::getAllWorkers()) {
+        if (!Server::getAllServers()) {
             return;
         }
         $disable_functions = explode(',', ini_get('disable_functions'));
         if (in_array('exec', $disable_functions, true)) {
             echo "\nMonitor file change turned off because exec() has been disabled by disable_functions setting in " . PHP_CONFIG_FILE_PATH . "/php.ini\n";
         } else {
-            if (!Worker::$daemonize) {
+            if (!Server::$daemonize) {
                 Timer::add(1, function () {
                     $this->checkAllFilesChange();
                 });
