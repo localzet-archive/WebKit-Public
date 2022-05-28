@@ -21,6 +21,6 @@ return [
     'pid_file' => runtime_path() . '/framex.pid',
     'status_file' => runtime_path() . '/framex.status',
     'stdout_file' => runtime_path() . '/logs/stdout.log',
-    'log_file' => runtime_path() . '/logs/V3.log',
+    'log_file' => runtime_path() . '/logs/Core.log',
     'max_package_size' => 10 * 1024 * 1024
 ];
