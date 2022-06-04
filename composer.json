@@ -36,13 +36,13 @@
     },
     "scripts": {
         "post-package-install": [
-            "support\\Plugin::install"
+            "Support\\Plugin::install"
         ],
         "post-package-update": [
-            "support\\Plugin::install"
+            "Support\\Plugin::install"
         ],
         "pre-package-uninstall": [
-            "support\\Plugin::uninstall"
+            "Support\\Plugin::uninstall"
         ]
     }
 }
