@@ -13,20 +13,14 @@
  * @license     https://www.localzet.ru/license GNU GPLv3 License
  */
 
+$date = new \DateTime();
+$date->setDate(2100, 12, 31);
+$exp = floor($date->format('U'));
+
 return [
-    'mysql' => [
-        'host' => 'localhost',
-        'username' => '',
-        'password' => '',
-        'db' => '',
-        'port' => 3306,
-        'charset' => 'utf8'
-    ],
-    'pgsql' => [
-        'host' => 'localhost',
-        'username' => '',
-        'password' => '',
-        'db' => '',
-        'port' => 5432
-    ]
+    'key' => '',
+    'alg' => 'HS256',
+    'iss' => '',
+    'aud' => '',
+    'exp' => $exp
 ];
