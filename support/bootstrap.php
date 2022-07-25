@@ -3,7 +3,7 @@
 /**
  * @version     1.0.0-dev
  * @package     FrameX
- * @link        https://framex.localzet.ru
+ * @link        https://localzet.gitbook.io
  * 
  * @author      localzet <creator@localzet.ru>
  * 
