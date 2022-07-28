@@ -2,7 +2,6 @@
 <?php
 
 /**
- * @version     1.0.0-dev
  * @package     FrameX
  * @link        https://framex.localzet.ru
  * 

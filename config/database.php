@@ -1,7 +1,6 @@
 <?php
 
 /**
- * @version     1.0.0-dev
  * @package     T_University
  * @link        https://www.t-university.ru
  * 
