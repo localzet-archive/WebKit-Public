@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package     FrameX
+ * @package     FrameX (FX) Engine
  * @link        https://localzet.gitbook.io
  * 
  * @author      localzet <creator@localzet.ru>

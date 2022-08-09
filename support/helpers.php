@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package     FrameX
+ * @package     T-University Project
  * @link        https://localzet.gitbook.io
  * 
  * @author      localzet <creator@localzet.ru>
