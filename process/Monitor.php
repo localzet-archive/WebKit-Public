@@ -1,16 +1,23 @@
 <?php
 
 /**
- * @author    localzet<creator@localzet.ru>
- * @copyright localzet<creator@localzet.ru>
- * @link      https://www.localzet.ru/
- * @license   https://www.localzet.ru/license GNU GPLv3 License
+ * @author      localzet <creator@localzet.ru>
+ * 
+ * @copyright   Copyright (c) 2018-2020 Zorin Projects 
+ * @copyright   Copyright (c) 2020-2022 NONA Team
+ * 
+ * @license     https://www.localzet.ru/license GNU GPLv3 License
  */
 
 namespace process;
 
 use localzet\Core\Timer;
 use localzet\Core\Server;
+
+use SplFileInfo;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use FilesystemIterator;
 
 /**
  * Class FileMonitor
@@ -36,19 +43,26 @@ class Monitor
      */
     public function __construct($monitor_dir, $monitor_extensions, $memory_limit = null)
     {
-        $this->_paths = (array)$monitor_dir;
+        $this->_paths = (array) $monitor_dir;
         $this->_extensions = $monitor_extensions;
         if (!Server::getAllServers()) {
+            // Если сервер не запущен
             return;
         }
+
+        // Проверяем отключена ли exec(), без неё всё бессмысленно
         $disable_functions = explode(',', ini_get('disable_functions'));
         if (in_array('exec', $disable_functions, true)) {
-            echo "\nMonitor file change turned off because exec() has been disabled by disable_functions setting in " . PHP_CONFIG_FILE_PATH . "/php.ini\n";
+            echo "\nМониторинг изменений файлов отключён, потому что exec() отключен в " . PHP_CONFIG_FILE_PATH . "/php.ini\n";
         } else {
-            if (!Server::$daemonize) {
+            // Монитор работает только в режиме отладки, во избежание крашей на проде
+            // if (!Server::$daemonize) {
+            if (config('app.debug')) {
                 Timer::add(1, function () {
                     $this->checkAllFilesChange();
                 });
+            } else {
+                echo "\nМониторинг изменений файлов отключён в режиме демона\n";
             }
         }
 
@@ -72,31 +86,32 @@ class Monitor
             if (!is_file($monitor_dir)) {
                 return;
             }
-            $iterator = [new \SplFileInfo($monitor_dir)];
+            $iterator = [new SplFileInfo($monitor_dir)];
         } else {
-            // recursive traversal directory
-            $dir_iterator = new \RecursiveDirectoryIterator($monitor_dir, \FilesystemIterator::FOLLOW_SYMLINKS);
-            $iterator = new \RecursiveIteratorIterator($dir_iterator);
+            // Рекурсивный обход каталогов
+            $dir_iterator = new RecursiveDirectoryIterator($monitor_dir, FilesystemIterator::FOLLOW_SYMLINKS);
+            $iterator = new RecursiveIteratorIterator($dir_iterator);
         }
         foreach ($iterator as $file) {
-            /** var SplFileInfo $file */
+            /** @var SplFileInfo $file */
             if (is_dir($file)) {
                 continue;
             }
-            // check mtime
+            // Проверка времени
             if ($last_mtime < $file->getMTime() && in_array($file->getExtension(), $this->_extensions, true)) {
                 $var = 0;
                 exec(PHP_BINARY . " -l " . $file, $out, $var);
+                $last_mtime = $file->getMTime();
+
                 if ($var) {
-                    $last_mtime = $file->getMTime();
                     continue;
                 }
-                $last_mtime = $file->getMTime();
-                echo $file . " update and reload\n";
-                // send SIGUSR1 signal to master process for reload
+                echo $file . " Обновлён и перезапущен\n";
+                // Отправляем SIGUSR1 в мастер-процесс для перезагрузки
                 if (DIRECTORY_SEPARATOR === '/') {
                     posix_kill(posix_getppid(), SIGUSR1);
                 } else {
+                    // Windows так не может
                     return true;
                 }
                 break;
@@ -146,7 +161,7 @@ class Monitor
     }
 
     /**
-     * Get memory limit
+     * Получение лимита паняти
      * @return float
      */
     protected function getMemoryLimit($memory_limit)
