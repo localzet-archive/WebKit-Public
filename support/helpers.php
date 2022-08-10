@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package     T-University Project
+ * @package     FrameX (FX) Engine
  * @link        https://localzet.gitbook.io
  * 
  * @author      localzet <creator@localzet.ru>
@@ -12,18 +12,17 @@
  * @license     https://www.localzet.ru/license GNU GPLv3 License
  */
 
-use support\MySQL;
-use support\PgSQL;
-use support\JWT;
 use support\Request;
 use support\Response;
 use support\Container;
-use support\bot\Telegram;
+
 use support\view\Raw;
 use support\view\Blade;
 use support\view\ThinkPHP;
 use support\view\Twig;
+
 use localzet\Core\Server;
+
 use localzet\FrameX\App;
 use localzet\FrameX\Config;
 use localzet\FrameX\Route;
@@ -35,6 +34,20 @@ if (is_phar()) {
     define('BASE_PATH', realpath(__DIR__ . '/../'));
 }
 define('FRAMEX_VERSION', '1.3.0');
+
+/**
+ * @return \FrameX\MySQL
+ */
+function db()
+{
+    if (class_exists(\FrameX\MySQL::class)) {
+        return new \FrameX\MySQL();
+    } else if (class_exists(\FrameX\JSONDB::class)) {
+        return new \FrameX\JSONDB();
+    } else if (class_exists(\FrameX\PgSQL::class)) {
+        return new \FrameX\PgSQL();
+    }
+}
 
 /**
  * @param $return_phar
@@ -91,37 +104,83 @@ function runtime_path()
     }
     return $path;
 }
+
 /**
  * @param int $status
  * @param array $headers
  * @param string $body
  * @return Response
  */
-function response($body = '', $status = 200, $headers = array(), $http_status = false)
+function response($body = '', $status = 200, $headers = array(), $http_status = false, $onlyJson = false)
 {
-    $headers = ['Content-Type' => 'application/json'] + config('server.http.headers') + $headers;
-
-    $body = json_encode([
+    $headers = $headers;
+    $body = [
         'debug' => config('app.debug'),
         'status' => $status,
         'data' => $body
-    ], JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
+    ];
+    $status = ($http_status === true) ? $status : 200;
 
-    if ($http_status == true) {
-        return new Response($status, $headers, $body);
+    if (request()->expectsJson() || $onlyJson) {
+        return responseJson($body, $status, $headers);
     } else {
-        return new Response(200, $headers, $body);
+        return responseView($body, $status, $headers);
     }
 }
 
 /**
+ * @param string $blob
+ * @return Response
+ */
+function responseBlob($blob, $type = 'image/png')
+{
+    return new Response(
+        200,
+        [
+            'Content-Type' => $type,
+            'Content-Length' => strlen($blob)
+        ],
+        $blob
+    );
+}
+
+/**
  * @param $data
+ * @param int $status
+ * @param array $headers
  * @param int $options
  * @return Response
  */
-function json($data, $options = JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR)
+function responseJson($data, $status = 200, $headers = array(), $options = JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR)
 {
-    return new Response(200, ['Content-Type' => 'application/json'] + config('server.http.headers'), json_encode($data, $options));
+    $headers = ['Content-Type' => 'application/json'] + $headers;
+    $body = json($data, $options);
+
+    return new Response($status, $headers, $body);
+}
+
+/**
+ * @param $data
+ * @param int $status
+ * @param array $headers
+ * @return Response
+ */
+function responseView($data, $status = 200, $headers = array())
+{
+    $template = ($data['status'] == 200) ? 'response/success' : 'response/error';
+    $status = ($status != 200) ? $status : $data['status'];
+
+    return new Response($status, $headers, Raw::render($template, $data, ""));
+}
+
+/**
+ * @param mixed $value
+ * @param int $flags
+ * @return string|false
+ */
+function json($value, $flags = JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR)
+{
+    return json_encode($value, $flags);
 }
 
 /**
@@ -133,7 +192,7 @@ function xml($xml)
     if ($xml instanceof SimpleXMLElement) {
         $xml = $xml->asXML();
     }
-    return new Response(200, ['Content-Type' => 'text/xml'] + config('server.http.headers'), $xml);
+    return new Response(200, ['Content-Type' => 'text/xml'], $xml);
 }
 
 /**
@@ -146,7 +205,7 @@ function jsonp($data, $callback_name = 'callback')
     if (!is_scalar($data) && null !== $data) {
         $data = json_encode($data);
     }
-    return new Response(200, config('server.http.headers'), "$callback_name($data)");
+    return new Response(200, [], "$callback_name($data)");
 }
 
 /**
@@ -157,7 +216,7 @@ function jsonp($data, $callback_name = 'callback')
  */
 function redirect($location, $status = 302, $headers = [])
 {
-    $response = new Response($status, ['Location' => $location] + config('server.http.headers'));
+    $response = new Response($status, ['Location' => $location]);
     if (!empty($headers)) {
         $response->withHeaders($headers);
     }
@@ -170,13 +229,13 @@ function redirect($location, $status = 302, $headers = [])
  * @param null $app
  * @return Response
  */
-function view($template, $vars = [], $app = null)
+function view($template, $vars = [], $app = null, $http_code = 200)
 {
     static $handler;
     if (null === $handler) {
         $handler = config('view.handler');
     }
-    return new Response(200, config('server.http.headers'), $handler::render($template, $vars, $app));
+    return new Response($http_code, [], $handler::render($template, $vars, $app));
 }
 
 /**
@@ -187,7 +246,7 @@ function view($template, $vars = [], $app = null)
  */
 function raw_view($template, $vars = [], $app = null)
 {
-    return new Response(200, config('server.http.headers'), Raw::render($template, $vars, $app));
+    return new Response(200, [], Raw::render($template, $vars, $app));
 }
 
 /**
@@ -198,7 +257,7 @@ function raw_view($template, $vars = [], $app = null)
  */
 function blade_view($template, $vars = [], $app = null)
 {
-    return new Response(200, config('server.http.headers'), Blade::render($template, $vars, $app));
+    return new Response(200, [], Blade::render($template, $vars, $app));
 }
 
 /**
@@ -209,7 +268,7 @@ function blade_view($template, $vars = [], $app = null)
  */
 function think_view($template, $vars = [], $app = null)
 {
-    return new Response(200, config('server.http.headers'), ThinkPHP::render($template, $vars, $app));
+    return new Response(200, [], ThinkPHP::render($template, $vars, $app));
 }
 
 /**
@@ -220,7 +279,7 @@ function think_view($template, $vars = [], $app = null)
  */
 function twig_view($template, $vars = [], $app = null)
 {
-    return new Response(200, config('server.http.headers'), Twig::render($template, $vars, $app));
+    return new Response(200, [], Twig::render($template, $vars, $app));
 }
 
 /**
@@ -300,7 +359,7 @@ function session($key = null, $default = null)
  */
 function not_found()
 {
-    return new Response(404, config('server.http.headers'), file_get_contents(public_path() . '/404.html'));
+    return new Response(404, [], file_get_contents(public_path() . '/404.html'));
 }
 
 /**
@@ -467,26 +526,11 @@ function cpu_count()
     return $count > 0 ? $count : 4;
 }
 
-/**
- * @return \support\MySQL
- */
-function db($type = 'MySQL')
+function storage()
 {
-    if ($type == 'MySQL') {
-        return new MySQL(config('database.mysql'));
-    } elseif ($type == 'PgSQL') {
-        return new PgSQL(config('database.pgsql'));
+    if (class_exists(\localzet\Storage\Client::class)) {
+        return new \localzet\Storage\Client();
     }
-}
-
-function tgBot()
-{
-    return new Telegram(config('bot'));
-}
-
-function jwt()
-{
-    return new JWT(config('jwt'));
 }
 
 /**
@@ -494,12 +538,16 @@ function jwt()
  *
  * @return string IP-адрес
  */
-function getRequestIp(Request $request)
+function getRequestIp()
 {
-    if (!empty($request->header('x-real-ip')) && validate_ip($request->header('x-real-ip'))) {
-        $ip = $request->header('x-real-ip');
-    } elseif (!empty($request->header('x-forwarded-for')) && validate_ip($request->header('x-forwarded-for'))) {
-        $ip = $request->header('x-forwarded-for');
+    if (!empty(request()->header('x-real-ip')) && validate_ip(request()->header('x-real-ip'))) {
+        $ip = request()->header('x-real-ip');
+    } elseif (!empty(request()->header('x-forwarded-for')) && validate_ip(request()->header('x-forwarded-for'))) {
+        $ip = request()->header('x-forwarded-for');
+    } elseif (!empty(request()->header('client-ip')) && validate_ip(request()->header('client-ip'))) {
+        $ip = request()->header('client-ip');
+    } elseif (!empty(request()->header('remote-addr')) && validate_ip(request()->header('remote-addr'))) {
+        $ip = request()->header('remote-addr');
     } else {
         $ip = null;
     }
@@ -551,9 +599,9 @@ function validate_ip(string $ip)
  *      'platform'
  *  )
  */
-function getBrowser(Request $request)
+function getBrowser()
 {
-    $u_agent = $request->header('user-agent');
+    $u_agent = request()->header('user-agent');
     // echo $u_agent;
     $bname = 'Неизвестно';
     $ub = "Неизвестно";
@@ -623,6 +671,8 @@ function getBrowser(Request $request)
         'platform'  => $platform
     );
 }
+
+// class Methods
 
 /**
  * Генерация ID
