@@ -9,6 +9,11 @@
 
 return [
     'listen' => 'http://0.0.0.0:8787',
+    'storage' => [
+        'enable' => false,
+        'ip' => '0.0.0.0',
+        'port' => '8008'
+    ],
     'transport' => 'tcp',
     'context' => [],
     'name' => 'FrameX',
