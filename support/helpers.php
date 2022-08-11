@@ -36,16 +36,23 @@ if (is_phar()) {
 define('FRAMEX_VERSION', '1.3.0');
 
 /**
- * @return \FrameX\MySQL
+ * @return \FrameX\MySQL\MySQL
  */
 function db()
 {
-    if (class_exists(\FrameX\MySQL::class)) {
-        return new \FrameX\MySQL();
-    } else if (class_exists(\FrameX\JSONDB::class)) {
-        return new \FrameX\JSONDB();
-    } else if (class_exists(\FrameX\PgSQL::class)) {
-        return new \FrameX\PgSQL();
+    if (class_exists(\FrameX\MySQL\MySQL::class)) {
+        return new \FrameX\MySQL\MySQL();
+    } else if (class_exists(\FrameX\JSONDB\JSONDB::class)) {
+        return new \FrameX\JSONDB\JSONDB();
+    } else if (class_exists(\FrameX\PgSQL\PgSQL::class)) {
+        return new \FrameX\PgSQL\PgSQL();
+    }
+}
+
+function storage()
+{
+    if (class_exists(\localzet\Storage\Client::class)) {
+        return new \localzet\Storage\Client();
     }
 }
 
@@ -524,13 +531,6 @@ function cpu_count()
         }
     }
     return $count > 0 ? $count : 4;
-}
-
-function storage()
-{
-    if (class_exists(\localzet\Storage\Client::class)) {
-        return new \localzet\Storage\Client();
-    }
 }
 
 /**
