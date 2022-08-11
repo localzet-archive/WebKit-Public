@@ -36,16 +36,16 @@ if (is_phar()) {
 define('FRAMEX_VERSION', '1.3.0');
 
 /**
- * @return \FrameX\MySQL\MySQL
+ * @return \FrameX\MySQL\Main
  */
 function db()
 {
-    if (class_exists(\FrameX\MySQL\MySQL::class)) {
-        return new \FrameX\MySQL\MySQL();
-    } else if (class_exists(\FrameX\JSONDB\JSONDB::class)) {
-        return new \FrameX\JSONDB\JSONDB();
-    } else if (class_exists(\FrameX\PgSQL\PgSQL::class)) {
-        return new \FrameX\PgSQL\PgSQL();
+    if (class_exists(\FrameX\MySQL\Main::class)) {
+        return new \FrameX\MySQL\Main();
+    } else if (class_exists(\FrameX\JSONDB\Main::class)) {
+        return new \FrameX\JSONDB\Main();
+    } else if (class_exists(\FrameX\PgSQL\Main::class)) {
+        return new \FrameX\PgSQL\Main();
     }
 }
 
