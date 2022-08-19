@@ -15,6 +15,7 @@
 use support\Request;
 use support\Response;
 use support\Container;
+use support\database\MySQL;
 
 use support\view\Raw;
 use support\view\Blade;
@@ -32,6 +33,13 @@ if (\is_phar()) {
     \define('BASE_PATH', dirname(__DIR__));
 } else {
     \define('BASE_PATH', realpath(__DIR__ . '/../'));
+}
+
+
+function db(string $connection = 'default')
+{
+    $db = new MySQL();
+    return $db->connection($connection);
 }
 
 /**
