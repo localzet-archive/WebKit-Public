@@ -77,7 +77,7 @@ class Monitor
      */
     public function checkFilesChange($monitor_dir)
     {
-        static $last_mtime;
+        static $last_mtime, $too_many_files_check;
         if (!$last_mtime) {
             $last_mtime = time();
         }
@@ -89,10 +89,14 @@ class Monitor
             $iterator = [new SplFileInfo($monitor_dir)];
         } else {
             // Рекурсивный обход каталогов
-            $dir_iterator = new RecursiveDirectoryIterator($monitor_dir, FilesystemIterator::FOLLOW_SYMLINKS);
+            $dir_iterator = new RecursiveDirectoryIterator($monitor_dir, FilesystemIterator::SKIP_DOTS | FilesystemIterator::FOLLOW_SYMLINKS);
             $iterator = new RecursiveIteratorIterator($dir_iterator);
         }
+
+        $count = 0;
         foreach ($iterator as $file) {
+            $count++;
+
             /** @var SplFileInfo $file */
             if (is_dir($file)) {
                 continue;
@@ -100,7 +104,7 @@ class Monitor
             // Проверка времени
             if ($last_mtime < $file->getMTime() && in_array($file->getExtension(), $this->_extensions, true)) {
                 $var = 0;
-                exec(PHP_BINARY . " -l " . $file, $out, $var);
+                exec('"' . PHP_BINARY . '" -l ' . $file, $out, $var);
                 $last_mtime = $file->getMTime();
 
                 if ($var) {
@@ -116,6 +120,10 @@ class Monitor
                 }
                 break;
             }
+        }
+        if (!$too_many_files_check && $count > 1000) {
+            echo "Монитор: Слишком много файлов ($count) в $monitor_dir, что делает мониторинг файлов очень медленным\n";
+            $too_many_files_check = 1;
         }
     }
 

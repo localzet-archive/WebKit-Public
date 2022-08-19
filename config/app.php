@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author    localzet<creator@localzet.ru>
  * @copyright localzet<creator@localzet.ru>
@@ -11,9 +12,11 @@ use support\Request;
 return [
     'debug' => true,
     'version' => 'Server',
+    'error_reporting' => E_ALL,
     'default_timezone' => 'Europe/Moscow',
     'request_class' => Request::class,
     'public_path' => base_path() . DIRECTORY_SEPARATOR . 'public',
     'runtime_path' => base_path(false) . DIRECTORY_SEPARATOR . 'runtime',
     'controller_suffix' => '',
+    'controller_reuse' => true,
 ];

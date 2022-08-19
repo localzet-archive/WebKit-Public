@@ -17,7 +17,7 @@
     },
     "require": {
         "php": ">=7.4",
-        "localzet/framex": ">=1.0.0",
+        "localzet/framex": ">=1.1.0",
         "monolog/monolog": "^2.0"
     },
     "suggest": {
@@ -34,13 +34,13 @@
     },
     "scripts": {
         "post-package-install": [
-            "Support\\Plugin::install"
+            "support\\Plugin::install"
         ],
         "post-package-update": [
-            "Support\\Plugin::install"
+            "support\\Plugin::update"
         ],
         "pre-package-uninstall": [
-            "Support\\Plugin::uninstall"
+            "support\\Plugin::uninstall"
         ]
     }
 }
