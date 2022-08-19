@@ -15,7 +15,6 @@
 use support\Request;
 use support\Response;
 use support\Container;
-use support\database\MySQL;
 
 use support\view\Raw;
 use support\view\Blade;
@@ -27,6 +26,7 @@ use localzet\Core\Server;
 use localzet\FrameX\App;
 use localzet\FrameX\Config;
 use localzet\FrameX\Route;
+use support\database\MySQL;
 
 // Phar support.
 if (\is_phar()) {
@@ -34,6 +34,14 @@ if (\is_phar()) {
 } else {
     \define('BASE_PATH', realpath(__DIR__ . '/../'));
 }
+
+// Совместимость версий
+define('WEBMAN_VERSION', '1.4.1');
+define('WEBMAN_FRAMEWORK_VERSION', '1.4.4');
+
+define('WEBCORE_VERSION', '1.1.2');
+define('FRAMEX_VERSION', '1.1.0');
+define('FRAMEX_FRAMEWORK_VERSION', '1.1.0');
 
 
 function db(string $connection = 'default')
@@ -43,7 +51,7 @@ function db(string $connection = 'default')
 }
 
 /**
- * @param $return_phar
+ * @param bool $return_phar
  * @return false|string
  */
 function base_path(bool $return_phar = true)
@@ -144,7 +152,7 @@ function responseBlob($blob, $type = 'image/png')
  * @param int $options
  * @return Response
  */
-function responseJson($data, $status = 200, $headers = array(), $options = JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR)
+function responseJson($data, $status = 200, $headers = [], $options = JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR)
 {
     $headers = ['Content-Type' => 'application/json'] + $headers;
     $body = json($data, $options);
@@ -158,7 +166,7 @@ function responseJson($data, $status = 200, $headers = array(), $options = JSON_
  * @param array $headers
  * @return Response
  */
-function responseView($data, $status = 200, $headers = array())
+function responseView($data, $status = 200, $headers = [])
 {
     $template = ($data['status'] == 200) ? 'response/success' : 'response/error';
     $status = ($status != 200) ? $status : $data['status'];
@@ -217,17 +225,17 @@ function redirect(string $location, int $status = 302, array $headers = [])
 }
 
 /**
- * @param $template
+ * @param string $template
  * @param array $vars
- * @param null $app
+ * @param string $app
+ * @param int $http_code
  * @return Response
  */
-function view(string $template, array $vars = [], string $app = null, $http_code = 200)
+function view(string $template, array $vars = [], string $app = null, int $http_code = 200)
 {
-    static $handler;
-    if (null === $handler) {
-        $handler = config('view.handler');
-    }
+    $request = \request();
+    $plugin =  $request->plugin ?? '';
+    $handler = \config($plugin ? "plugin.$plugin.view.handler" : 'view.handler');
     return new Response($http_code, [], $handler::render($template, $vars, $app));
 }
 
@@ -236,6 +244,7 @@ function view(string $template, array $vars = [], string $app = null, $http_code
  * @param array $vars
  * @param string|null $app
  * @return Response
+ * @throws Throwable
  */
 function raw_view(string $template, array $vars = [], string $app = null)
 {
@@ -357,6 +366,7 @@ function not_found()
 
 /**
  * Copy dir.
+ *
  * @param string $source
  * @param string $dest
  * @param bool $overwrite
@@ -364,23 +374,24 @@ function not_found()
  */
 function copy_dir(string $source, string $dest, bool $overwrite = false)
 {
-    if (\is_dir($source)) {
-        if (!\is_dir($dest)) {
-            \mkdir($dest);
+    if (is_dir($source)) {
+        if (!is_dir($dest)) {
+            mkdir($dest);
         }
-        $files = \scandir($source);
+        $files = scandir($source);
         foreach ($files as $file) {
             if ($file !== "." && $file !== "..") {
                 copy_dir("$source/$file", "$dest/$file");
             }
         }
-    } else if (\file_exists($source) && ($overwrite || !\file_exists($dest))) {
-        \copy($source, $dest);
+    } else if (file_exists($source) && ($overwrite || !file_exists($dest))) {
+        copy($source, $dest);
     }
 }
 
 /**
  * Remove dir.
+ *
  * @param string $dir
  * @return bool
  */
@@ -413,12 +424,12 @@ function server_bind($server, $class)
         'onWebSocketConnect'
     ];
     foreach ($callback_map as $name) {
-        if (\method_exists($class, $name)) {
+        if (method_exists($class, $name)) {
             $server->$name = [$class, $name];
         }
     }
-    if (\method_exists($class, 'onServerStart')) {
-        \call_user_func([$class, 'onServerStart'], $server);
+    if (method_exists($class, 'onServerStart')) {
+        call_user_func([$class, 'onServerStart'], $server);
     }
 }
 

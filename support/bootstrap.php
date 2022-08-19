@@ -45,7 +45,6 @@ if ($server) {
 }
 
 // Перезапросить конфигурацию
-// Config::reload(config_path(), ['route', 'container']);
 support\App::loadAllConfig(['route']);
 
 foreach (config('autoload.files', []) as $file) {
@@ -108,7 +107,6 @@ foreach (config('plugin', []) as $firm => $projects) {
 //     ]
 // ]];
 
-// Загружаем промежуточное ПО
 Middleware::load(config('middleware', []), '');
 
 // Загружаем промежуточное ПО плагинов
@@ -136,7 +134,7 @@ foreach (config('bootstrap', []) as $class_name) {
         Log::error($log);
         continue;
     }
-    /** @var Bootstrap $class_name */
+    /** @var \localzet\FrameX\Bootstrap $class_name */
     $class_name::start($server);
 }
 
@@ -153,7 +151,7 @@ foreach (config('plugin', []) as $firm => $projects) {
                 Log::error($log);
                 continue;
             }
-            /** @var Bootstrap $class_name */
+            /** @var \localzet\FrameX\Bootstrap $class_name */
             $class_name::start($server);
         }
     }
