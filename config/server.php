@@ -8,7 +8,11 @@
  */
 
 return [
-    'listen' => 'http://0.0.0.0:8787',
+    'listen' => 'http://0.0.0.0:88',
+    'subdomains' => [
+        'enable' => false,
+        'domain' => 'example.ru',
+    ],
     'storage' => [
         'enable' => false,
         'ip' => '0.0.0.0',
