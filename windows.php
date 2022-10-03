@@ -10,6 +10,7 @@ use Dotenv\Dotenv;
 use localzet\Core\Server;
 
 ini_set('display_errors', 'on');
+error_reporting(E_ALL);
 
 if (class_exists('Dotenv\Dotenv') && file_exists(base_path() . '/.env')) {
     if (method_exists('Dotenv\Dotenv', 'createUnsafeImmutable')) {
@@ -21,7 +22,7 @@ if (class_exists('Dotenv\Dotenv') && file_exists(base_path() . '/.env')) {
 
 App::loadAllConfig(['route']);
 
-$error_reporting = config('app.error_reporting', E_ALL);
+$error_reporting = config('app.error_reporting');
 if (isset($error_reporting)) {
     error_reporting($error_reporting);
 }
@@ -57,7 +58,6 @@ function write_process_file($runtime_process_path, $process_name, $firm)
     $config_param = $firm ? "config('plugin.$firm.process')['$process_name']" : "config('process')['$process_name']";
     $file_content = <<<EOF
 <?php
-
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 use localzet\Core\Server;
@@ -72,13 +72,15 @@ if (is_callable('opcache_reset')) {
 }
 
 App::loadAllConfig(['route']);
-server_start('$process_param', $config_param);
+
+worker_start('$process_param', $config_param);
 
 if (DIRECTORY_SEPARATOR != "/") {
     Server::\$logFile = config('server')['log_file'] ?? Server::\$logFile;
 }
 
 Server::runAll();
+
 EOF;
     $process_file = $runtime_process_path . DIRECTORY_SEPARATOR . "start_$process_param.php";
     file_put_contents($process_file, $file_content);
