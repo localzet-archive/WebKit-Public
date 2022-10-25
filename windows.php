@@ -73,7 +73,7 @@ if (is_callable('opcache_reset')) {
 
 App::loadAllConfig(['route']);
 
-worker_start('$process_param', $config_param);
+server_start('$process_param', $config_param);
 
 if (DIRECTORY_SEPARATOR != "/") {
     Server::\$logFile = config('server')['log_file'] ?? Server::\$logFile;
