@@ -11,7 +11,6 @@ use support\Request;
 
 return [
     'debug' => true,
-    'version' => 'Server',
     'error_reporting' => E_ALL,
     'default_timezone' => 'Europe/Moscow',
     'request_class' => Request::class,

@@ -12,5 +12,9 @@ use support\view\Blade;
 use support\view\ThinkPHP;
 
 return [
-    'handler' => Raw::class
+    'handler' => Raw::class,
+    'options' => [
+        'view_suffix' => 'phtml'
+    ]
+
 ];

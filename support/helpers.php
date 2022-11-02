@@ -15,6 +15,7 @@
 use support\Request;
 use support\Response;
 use support\Container;
+use support\database\MySQL;
 
 use support\view\Raw;
 use support\view\Blade;
@@ -26,7 +27,6 @@ use localzet\Core\Server;
 use localzet\FrameX\App;
 use localzet\FrameX\Config;
 use localzet\FrameX\Route;
-use support\database\MySQL;
 
 // Phar support.
 if (\is_phar()) {
@@ -36,12 +36,13 @@ if (\is_phar()) {
 }
 
 // Совместимость версий
+define('WORKERMAN_VERSION', '4.1.0');
+define('WEBMAN_FRAMEWORK_VERSION', '1.4.5');
 define('WEBMAN_VERSION', '1.4.1');
-define('WEBMAN_FRAMEWORK_VERSION', '1.4.4');
 
-define('WEBCORE_VERSION', '1.1.2');
-define('FRAMEX_VERSION', '1.1.0');
-define('FRAMEX_FRAMEWORK_VERSION', '1.1.0');
+define('WEBCORE_VERSION', '1.1.4');
+define('FRAMEX_FRAMEWORK_VERSION', '1.1.5');
+define('FRAMEX_VERSION', '1.2.3');
 
 
 function db(string $connection = 'default')
@@ -361,7 +362,7 @@ function session($key = null, $default = null)
  */
 function not_found()
 {
-    return new Response(404, [], file_get_contents(public_path() . '/404.html'));
+    return response('Ничего не найдено', 404);
 }
 
 /**
