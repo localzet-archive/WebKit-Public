@@ -17,8 +17,10 @@
     },
     "require": {
         "php": ">=8.1",
-        "localzet/framex": ">=1.1.0",
-        "framex/cors": "^1.0",
+        "localzet/framex": ">=1.0.0",
+        "framex/cors": ">=1.0.0",
+        "framex/http": ">=1.0.0",
+        "framex/jwt": ">=1.0.0",
         "psr/container": "^1.1.1",
         "php-di/php-di": "^6.4",
         "doctrine/annotations": "^1.13"
