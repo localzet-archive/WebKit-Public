@@ -23,6 +23,6 @@ return [
                 'Access-Control-Allow-Headers' => '*',
 
                 'Server' => 'WebCore ' . config('app.core_version', WEBCORE_VERSION),
-                'Server-Engine' => 'FrameX (FX) Engine ' . config('app.version', FRAMEX_FRAMEWORK_VERSION),
+                'Server-Engine' => 'FrameX (FX) Engine ' . config('app.version', WEBKIT_VERSION),
         ],
 ];
