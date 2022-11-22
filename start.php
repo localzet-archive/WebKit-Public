@@ -2,8 +2,8 @@
 <?php
 
 /**
- * @package     Localzet Development Kit
- * @link        https://localzet.gitbook.io/
+ * @package     FrameX (FX) Engine
+ * @link        https://localzet.gitbook.io/framex
  * 
  * @author      Ivan Zorin (localzet) <creator@localzet.ru>
  * @copyright   Copyright (c) 2018-2022 Localzet Group

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @package     Localzet Development Kit
- * @link        https://localzet.gitbook.io/
+ * @package     FrameX (FX) Engine
+ * @link        https://localzet.gitbook.io/framex
  * 
  * @author      Ivan Zorin (localzet) <creator@localzet.ru>
  * @copyright   Copyright (c) 2018-2022 Localzet Group
@@ -33,17 +33,33 @@ if (\is_phar()) {
 }
 
 // Совместимость версий
-define('WORKERMAN_VERSION', '4.1.0');
-define('WEBMAN_FRAMEWORK_VERSION', '1.4.5');
-define('WEBMAN_VERSION', '1.4.1');
+define('WORKERMAN_VERSION', '5.0.0');
+define('WEBMAN_FRAMEWORK_VERSION', '1.4.9');
+define('WEBMAN_VERSION', '1.4.5');
 
-define('WEBCORE_VERSION', '1.1.4');
-define('WEBKIT_VERSION', '1.1.5');
-define('FRAMEX_VERSION', '1.2.3');
+define('WEBCORE_VERSION', '1.1.9');
+define('WEBKIT_VERSION', '1.1.9');
+define('FRAMEX_VERSION', '1.2.9');
 
 
-function db(string $connection = 'default')
+/** 
+ * @deprecated 
+ * @see MySQL()
+ */
+function db(string $connection = NULL) {
+    return MySQL($connection);
+}
+
+function MySQL(string $connection = NULL)
 {
+    if (empty($connection)) {
+        $connection = config('database.default', 'default');
+    }
+
+    if (!in_array($connection, array_keys(config('database.connections'))) || config("database.connections.$connection.driver") == 'mysql') {
+        throw new Exception("MySQL соединения не существует в конфигурации");
+    }
+
     $db = new MySQL();
     return $db->connection($connection);
 }
