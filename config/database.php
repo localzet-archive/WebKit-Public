@@ -6,7 +6,7 @@
  * 
  * @author      Ivan Zorin (localzet) <creator@localzet.ru>
  * @copyright   Copyright (c) 2018-2022 Localzet Group
- * @license     https://www.localzet.ru/license GNU GPLv3 License
+ * @license     https://www.localzet.com/license GNU GPLv3 License
  */
 
 return [
@@ -18,7 +18,7 @@ return [
             'port'          => 3306,
             'database'      => 'framex',
             'username'      => 'rootx',
-            'password'      => '',
+            'password'      => 'rootx',
             'unix_socket'   => '',
             'charset'       => 'utf8',
             'collation'     => 'utf8_unicode_ci',
@@ -29,7 +29,7 @@ return [
 
         'sqlite' => [
             'driver'        => 'sqlite',
-            'database'      => '',
+            'database'      => 'framex',
             'prefix'        => '',
         ],
 
@@ -39,7 +39,7 @@ return [
             'port'          => 5432,
             'database'      => 'framex',
             'username'      => 'rootx',
-            'password'      => '',
+            'password'      => 'rootx',
             'charset'       => 'utf8',
             'prefix'        => '',
             'schema'        => 'public',
@@ -52,7 +52,7 @@ return [
             'port'          => 1433,
             'database'      => 'framex',
             'username'      => 'rootx',
-            'password'      => '',
+            'password'      => 'rootx',
             'charset'       => 'utf8',
             'prefix'        => '',
         ],

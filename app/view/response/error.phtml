@@ -1,28 +1,109 @@
-<!DOCTYPE html>
 <!-- 
  * @package     Localzet Development Kit
  * @link        https://localzet.gitbook.io/
  * 
  * @author      Ivan Zorin (localzet) <creator@localzet.ru>
  * @copyright   Copyright (c) 2018-2022 Localzet Group
- * @license     https://www.localzet.ru/license GNU GPLv3 License
+ * @license     https://www.localzet.com/license GNU GPLv3 License
 -->
+<?php
+/*
+ * Темы
+ */
+
+$hour = (int) date('H');
+
+/** 
+ * Светлая
+ */
+
+if ($hour >= 6 && $hour < 8) {
+  $light_time = "sunrise";
+} elseif ($hour >= 8 && $hour < 11) {
+  $light_time = "late-morning";
+} elseif ($hour >= 11 && $hour < 14) {
+  $light_time = "midday";
+} elseif ($hour >= 13 && $hour < 18) {
+  $light_time = "afternoon";
+} elseif ($hour >= 18 && $hour < 22) {
+  $light_time = "evening";
+} else {
+  // $light_time = "night";
+  $light_time = "evening";
+}
+
+/**
+ * Тёмная
+ */
+
+if ($hour >= 6 && $hour < 12) {
+  $dark_time = "Sunrise";
+} elseif ($hour >= 12 && $hour < 16) {
+  $dark_time = "Day";
+} elseif ($hour >= 16 && $hour < 18) {
+  $dark_time = "Evening";
+} elseif ($hour >= 18 && $hour < 22) {
+  $dark_time = "Twilight";
+} else {
+  $dark_time = "Night";
+}
+?>
+
+<!DOCTYPE html>
+
 <html lang="ru" prefix="og: http://ogp.me/ns#">
 
 <head>
   <base href="" />
-
-  <title><?= $status ?> - FrameX</title>
-
+  <title><?= $name ?></title>
   <meta charset="utf-8" />
 
-  <!-- SEO Meta -->
+  <!-- About App -->
   <meta name="language" content="RU" />
   <meta name="robots" content="index,follow" />
-  <meta name="title" content="<?= $status ?> - FrameX" />
-  <meta name="description" content="" />
-  <meta name="keywords" content="" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="title" content="<?= $name ?>" />
+  <meta name="description" content="<?= $description ?>" />
+  <meta name="keywords" content="<?= $keywords ?>" />
+  <meta name="viewport" content="<?= $viewport ?>" />
+
+  <!-- About Creator App -->
+  <meta name="owner" content="<?= $owner ?>" />
+  <meta name="designer" content="<?= $designer ?>" />
+  <meta name="author" content="<?= $author ?>" />
+  <meta name="copyright" content="<?= $copyright ?>" />
+  <meta name="reply-to" content="<?= $reply_to ?>" />
+
+  <!-- About System -->
+  <meta name="project" content="<?= $name ?>" />
+  <meta name="generator" content="FrameX (FX) Engine" />
+  <meta name="FrameX" version="<?= config('app.version', '!notSET!') ?>" debug="<?= config('app.debug', '!notSET!') ?>" />
+  <meta name="RootX" domain="<?= config('app.domain', '!notSET!') ?>" assets="<?= config('app.src', '!notSET!') ?>" />
+
+  <!-- Cache&Content -->
+  <meta http-equiv="Expires" content="60" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Cache-Control" content="no-cache" />
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+  <!-- OpenGraph -->
+  <meta property="og:title" content="<?= $name ?>" />
+  <meta property="og:description" content="<?= $description ?> " />
+  <meta property="og:locale" content="ru_RU" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="<?= $canonical ?>" />
+  <meta property="og:site_name" content="<?= $name ?>" />
+
+  <!-- OpenGraph Image -->
+  <meta property="og:image" content="<?= $og_image ?>" />
+  <meta property="og:image:url" content="<?= $og_image ?>" />
+  <meta property="og:image:secure_url" content="<?= $og_image ?>" />
+  <meta property="og:image:type" content="image/svg+xml" />
+  <meta property="og:image:width" content="1920" />
+  <meta property="og:image:height" content="1080" />
+
+  <!-- OpenGraph Other -->
+  <meta name="og:email" content="<?= $reply_to ?>" />
+  <meta name="og:country-name" content="Russian Federation" />
 
   <!-- Apple Meta Tags -->
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -30,34 +111,72 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   <meta name="format-detection" content="telephone=no" />
 
-  <!-- About Creator App -->
-  <meta name="owner" content="owner@rootx.ru" />
-  <meta name="designer" content="designer@rootx.ru" />
-  <meta name="author" content="localzet, creator@localzet.ru" />
-  <meta name="copyright" content="RootX Group" />
-  <meta name="reply-to" content="support@rootx.ru" />
+  <!-- SEO -->
+  <link rel="canonical" href="<?= $canonical ?>" />
+  <link rel="icon" type="image/svg+xml" href="<?= $logo ?>" />
+  <link rel="shortcut icon" type="image/svg+xml" href="<?= $logo ?>" />
 
-  <!-- System Information -->
-  <meta name="generator" content="FrameX (FX) Engine" />
-  <meta name="FrameX" version="<?= config('app.version', '!notSET!') ?>" debug="<?= config('app.debug', '!notSET!') ?>" />
+  <!-- Fonts -->
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Nunito:100,200,300,400,500,600,700,800,900" />
 
-  <!-- HTTP Equiv -->
-  <meta http-equiv="Expires" content="60" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Cache-Control" content="no-cache" />
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- App Styles -->
+  <link rel="stylesheet" type="text/css" href="<?= $_SRC ?>/app/19/assets/plugins/global/plugins.bundle.css" />
+  <link rel="stylesheet" type="text/css" href="<?= $_SRC ?>/app/19/assets/css/style.bundle.css" />
 
-  <!-- SEO Link -->
-  <link rel="canonical" href="<?= config('app.domain', request()->url()) ?>" />
-  <link rel="icon" type="image/svg+xml" href="<?= config('app.logo', '/favicon.svg') ?>" />
-  <link rel="shortcut icon" type="image/svg+xml" href="<?= config('app.logo', '/favicon.svg') ?>" />
+  <!--Theme-->
+  <script>
+    var AppInfo = <?= json($AppInfo) ?>;
+    var globalDebug = <?= config('app.debug') ? 'true' : 'false' ?>;
+    var hostUrl = "<?= $_SRC ?>/app/19/assets/";
+    var defaultThemeMode = "dark";
+    var themeMode;
+    if (document.documentElement) {
+      if (document.documentElement.hasAttribute("data-theme-mode")) {
+        themeMode = document.documentElement.getAttribute("data-theme-mode");
+      } else {
+        if (localStorage.getItem("data-theme") !== null) {
+          themeMode = localStorage.getItem("data-theme");
+        } else {
+          themeMode = defaultThemeMode;
+        }
+      }
+      if (themeMode === "system") {
+        console.log(window.MediaDeviceInfo);
+        themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      }
+      document.documentElement.setAttribute("data-theme", themeMode);
+      AppInfo.theme = themeMode;
+    }
+    if (globalDebug) console.info("Запуск \"" + AppInfo.name + "\" \n", AppInfo);
+  </script>
+
+  <!--Background-->
+  <style>
+    body {
+      background-image: url('<?= $_SRC ?>/media/backgrounds/zorin-blur/<?= $light_time ?>.png') !important;
+    }
+
+    [data-theme="dark"] body {
+      background-image: url('<?= $_SRC ?>/media/backgrounds/zorin-mountain/<?= $dark_time ?>.jpg') !important;
+    }
+
+    [data-theme="dark"] body .svg-icon {
+      color: var(--kt-white);
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  </style>
 </head>
 
 <body>
   <center>
     <h1>
-      <?= $data ?>
+      <?php $print = $error ?? $data; ?>
+      <?= is_string($print) ? $print : print_r($print, true) ?>
     </h1>
   </center>
   <hr />

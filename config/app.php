@@ -6,7 +6,7 @@
  * 
  * @author      Ivan Zorin (localzet) <creator@localzet.ru>
  * @copyright   Copyright (c) 2018-2022 Localzet Group
- * @license     https://www.localzet.ru/license GNU GPLv3 License
+ * @license     https://www.localzet.com/license GNU GPLv3 License
  */
 
 use support\Request;
@@ -21,17 +21,23 @@ return [
     'controller_suffix' => '',
     'controller_reuse' => true,
 
-    // Текущий домен
-    'domain' => 'https://www.rootx.ru',
+    // 'domain' => 'https://example.com',
+    // 'src' => 'https://src.example.com',
+    // 'fonts' => 'https://fonts.example.com',
 
-    // RX Sources - Центр ресурсов и статики
-    'src' => 'https://src.rootx.ru/{project}',
+    'info' => [
+        // 'name' => 'Название сайта',
+        // 'description' => 'Описание',
+        // 'keywords' => 'Ключевые слова',
+        // 'viewport' => '',
 
-    // Шрифты RootX
-    'fonts' => 'https://src.rootx.ru/fonts',
+        // 'logo' => 'URL логотипа',
+        // 'og_image' => 'URL Изображения OpenGraph',
 
-    // Для вызова из шаблонов
-    // Логотип RootX (RX) - FrameX (FX)
-    // .svg - со шрифтом Nunito, .png - без разницы
-    'logo' => 'https://src.rootx.ru/RX-FX.svg', 
+        // 'owner' => 'FirstName LastName (Nickname) <email>',
+        // 'designer' => 'FirstName LastName (Nickname) <email>',
+        // 'author' => 'FirstName LastName (Nickname) <email>',
+        // 'copyright' => 'Company',
+        // 'reply_to' => 'Email',
+    ],
 ];

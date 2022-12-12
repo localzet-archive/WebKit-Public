@@ -6,7 +6,7 @@
  * 
  * @author      Ivan Zorin (localzet) <creator@localzet.ru>
  * @copyright   Copyright (c) 2018-2022 Localzet Group
- * @license     https://www.localzet.ru/license GNU GPLv3 License
+ * @license     https://www.localzet.com/license GNU GPLv3 License
  */
 
 return [
@@ -23,7 +23,7 @@ return [
     'transport' => 'tcp',
     'context' => [],
     'name' => 'FrameX',
-    'count' => cpu_count() * 2,
+    'count' => cpu_count() * 4,
     'user' => '',
     'group' => '',
     'reusePort' => false,
