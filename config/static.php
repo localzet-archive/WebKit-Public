@@ -9,9 +9,6 @@
  * @license     https://www.localzet.com/license GNU GPLv3 License
  */
 
-/**
- * Static file settings
- */
 return [
     'enable' => true,
     'middleware' => [
