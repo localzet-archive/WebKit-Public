@@ -10,6 +10,7 @@
  */
 
 return [
-    support\bootstrap\Session::class,
+    support\bootstrap\Events::class,
     support\bootstrap\LaravelDb::class,
+    support\bootstrap\Session::class,
 ];
