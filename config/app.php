@@ -40,4 +40,15 @@ return [
         // 'copyright' => 'Company',
         // 'reply_to' => 'Email',
     ],
+    'headers' => [
+        'Content-Language' => 'ru',
+
+        'Access-Control-Allow-Origin' => '*',
+        'Access-Control-Allow-Credentials' => 'true',
+        'Access-Control-Allow-Methods' => '*',
+        'Access-Control-Allow-Headers' => '*',
+
+        'Server' => 'WebCore ' . WEBCORE_VERSION,
+        'Server-Engine' => 'FrameX (FX) Engine ' . WEBKIT_VERSION,
+    ],
 ];
