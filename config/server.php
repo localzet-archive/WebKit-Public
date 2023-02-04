@@ -1,37 +1,29 @@
 <?php
 
 /**
- * @package     Localzet Development Kit
- * @link        https://localzet.gitbook.io/
+ * @package     Triangle Framework (WebKit)
+ * @link        https://github.com/localzet/WebKit
+ * @link        https://github.com/Triangle-org/Framework
  * 
- * @author      Ivan Zorin (localzet) <creator@localzet.ru>
+ * @author      Ivan Zorin (localzet) <creator@localzet.com>
  * @copyright   Copyright (c) 2018-2022 Localzet Group
  * @license     https://www.localzet.com/license GNU GPLv3 License
  */
 
 return [
     'listen' => 'http://0.0.0.0:88',
-    'subdomains' => [
-        'enable' => false,
-        'domain' => 'example.ru',
-    ],
-    'storage' => [
-        'enable' => false,
-        'ip' => '0.0.0.0',
-        'port' => '8008'
-    ],
     'transport' => 'tcp',
     'context' => [],
-    'name' => 'FrameX',
+    'name' => 'Triangle',
     'count' => cpu_count() * 4,
     'user' => '',
     'group' => '',
     'reusePort' => false,
     'event_loop' => '',
     'stop_timeout' => 2,
-    'pid_file' => runtime_path() . '/framex.pid',
-    'status_file' => runtime_path() . '/framex.status',
+    'pid_file' => runtime_path() . '/triangle.pid',
+    'status_file' => runtime_path() . '/triangle.status',
     'stdout_file' => runtime_path() . '/logs/stdout.log',
-    'log_file' => runtime_path() . '/logs/Core.log',
+    'log_file' => runtime_path() . '/logs/server.log',
     'max_package_size' => 10 * 1024 * 1024
 ];

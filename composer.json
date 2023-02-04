@@ -1,23 +1,27 @@
 {
     "name": "localzet/webkit",
-    "description": "Web Development Kit",
+    "description": "Triangle Framework (WebKit) - Высокопроизводительный низкоуровневый MVC-фреймворк",
     "type": "project",
     "keywords": [
-        "localzet"
+        "localzet",
+        "Triangle"
     ],
     "license": "GPL-3.0-only",
-    "authors": [{
-        "name": "localzet",
-        "email": "creator@localzet.ru",
-        "homepage": "https://www.localzet.com",
-        "role": "Developer"
-    }],
+    "authors": [
+        {
+            "name": "Ivan Zorin",
+            "email": "creator@localzet.com",
+            "homepage": "https://www.localzet.com",
+            "role": "Developer"
+        }
+    ],
     "support": {
-        "email": "creator@localzet.ru"
+        "email": "support@localzet.com",
+        "source": "https://github.com/localzet/webkit"
     },
     "require": {
         "php": ">=8.1",
-        "localzet/framex": ">=1.4.8"
+        "localzet/framex": ">=2.0.0"
     },
     "suggest": {
         "ext-event": "For better performance. "

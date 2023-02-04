@@ -10,11 +10,8 @@
  * @license     https://www.localzet.com/license GNU GPLv3 License
  */
 
-namespace support;
-
-/**
- * Class Response
- */
-class Response extends \localzet\FrameX\Http\Response
-{
-}
+return [
+    'locale' => 'ru_RU',
+    'fallback_locale' => ['ru_RU', 'en'],
+    'path' => base_path() . '/resource/translations',
+];

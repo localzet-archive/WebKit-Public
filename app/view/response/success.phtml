@@ -1,8 +1,9 @@
 <!-- 
- * @package     Localzet Development Kit
- * @link        https://localzet.gitbook.io/
+ * @package     Triangle Framework (WebKit)
+ * @link        https://github.com/localzet/WebKit
+ * @link        https://github.com/Triangle-org/Framework
  * 
- * @author      Ivan Zorin (localzet) <creator@localzet.ru>
+ * @author      Ivan Zorin (localzet) <creator@localzet.com>
  * @copyright   Copyright (c) 2018-2022 Localzet Group
  * @license     https://www.localzet.com/license GNU GPLv3 License
 -->
@@ -72,7 +73,7 @@ if ($hour >= 6 && $hour < 12) {
 
   <!-- About System -->
   <meta name="project" content="<?= $name ?>" />
-  <meta name="generator" content="FrameX (FX) Engine" />
+  <meta name="generator" content="Triangle Framework (WebKit)" />
   <meta name="FrameX" version="<?= config('app.version', '!notSET!') ?>" debug="<?= config('app.debug', '!notSET!') ?>" />
   <meta name="RootX" domain="<?= config('app.domain', '!notSET!') ?>" assets="<?= config('app.src', '!notSET!') ?>" />
 
@@ -92,18 +93,17 @@ if ($hour >= 6 && $hour < 12) {
   <link rel="icon" type="image/svg+xml" href="<?= $logo ?>" />
   <link rel="shortcut icon" type="image/svg+xml" href="<?= $logo ?>" />
 
-  <!-- Fonts -->
-  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Nunito:100,200,300,400,500,600,700,800,900" />
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#12121200">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff00">
 
-  <!-- App Styles -->
-  <link rel="stylesheet" type="text/css" href="<?= $_SRC ?>/app/19/assets/plugins/global/plugins.bundle.css" />
-  <link rel="stylesheet" type="text/css" href="<?= $_SRC ?>/app/19/assets/css/style.bundle.css" />
+  <!-- Fonts -->
+  <!-- <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Nunito:100,200,300,400,500,600,700,800,900" /> -->
 
   <!--Theme-->
   <script>
     var AppInfo = <?= json($AppInfo) ?>;
     var globalDebug = <?= config('app.debug') ? 'true' : 'false' ?>;
-    var hostUrl = "<?= $_SRC ?>/app/19/assets/";
     var defaultThemeMode = "dark";
     var themeMode;
     if (document.documentElement) {
@@ -125,27 +125,6 @@ if ($hour >= 6 && $hour < 12) {
     }
     if (globalDebug) console.info("Запуск \"" + AppInfo.name + "\" \n", AppInfo);
   </script>
-
-  <!--Background-->
-  <style>
-    body {
-      background-image: url('<?= $_SRC ?>/media/backgrounds/zorin-blur/<?= $light_time ?>.png') !important;
-    }
-
-    [data-theme="dark"] body {
-      background-image: url('<?= $_SRC ?>/media/backgrounds/zorin-mountain/<?= $dark_time ?>.jpg') !important;
-    }
-
-    [data-theme="dark"] body .svg-icon {
-      color: var(--kt-white);
-    }
-
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-  </style>
 </head>
 
 <body>
@@ -157,10 +136,7 @@ if ($hour >= 6 && $hour < 12) {
   </center>
   <hr />
   <center>
-    FrameX (FX) Engine <br />
-    WebCore
-    <?= config('app.version', 'Server') ?>
-  </center>
+    Работает на <a href="https://github.com/Triangle-org">Triangle Web</a></center>
 </body>
 
 </html>
