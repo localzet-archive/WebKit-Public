@@ -10,9 +10,10 @@
  * @license     https://www.localzet.com/license GNU GPLv3 License
  */
 
-use support\Container;
+use support\Db;
 use support\Request;
 use support\Response;
+use support\Container;
 use support\Translation;
 use support\database\MySQL;
 use support\view\Blade;
@@ -41,21 +42,36 @@ define('FRAMEX_VERSION', '1.2.9');
 
 
 /** 
- * @deprecated 
- * @see MySQL()
+ * @param string|null $connection
+ * @param string|null $collection
+ * @return \support\mongodb\Connection|\support\mongodb\Query\Builder
  */
-function db(string $connection = NULL)
+function MongoDB(string $connection = NULL, string $collection = NULL)
 {
-    return MySQL($connection);
+    if (empty($connection)) {
+        $connection = config('database.default', 'default');
+    }
+
+    if (!in_array($connection, array_keys(config('database.connections'))) || config("database.connections.$connection.driver") != 'mongodb') {
+        throw new Exception("MongoDB соединения не существует в конфигурации");
+    }
+
+    /** @var \support\mongodb\Connection $db */
+    $db = Db::connection($connection);
+    return empty($collection) ? $db : $db->collection($collection);
 }
 
+/** 
+ * @param string|null $connection
+ * @return \support\database\MySQL
+ */
 function MySQL(string $connection = NULL)
 {
     if (empty($connection)) {
         $connection = config('database.default', 'default');
     }
 
-    if (!in_array($connection, array_keys(config('database.connections'))) || config("database.connections.$connection.driver") == 'mysql') {
+    if (!in_array($connection, array_keys(config('database.connections'))) || config("database.connections.$connection.driver") != 'mysql') {
         throw new Exception("MySQL соединения не существует в конфигурации");
     }
 
