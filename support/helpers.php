@@ -9,6 +9,7 @@
  * @license     https://www.localzet.com/license GNU GPLv3 License
  */
 
+use support\Db;
 use support\Request;
 use support\Response;
 use support\Container;
