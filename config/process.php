@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @package     Localzet Development Kit
- * @link        https://localzet.gitbook.io/
+ * @package     Triangle Framework (WebKit)
+ * @link        https://github.com/localzet/WebKit
+ * @link        https://github.com/Triangle-org/Framework
  * 
- * @author      Ivan Zorin (localzet) <creator@localzet.ru>
+ * @author      Ivan Zorin (localzet) <creator@localzet.com>
  * @copyright   Copyright (c) 2018-2022 Localzet Group
  * @license     https://www.localzet.com/license GNU GPLv3 License
  */
@@ -16,7 +17,7 @@ return [
         'handler' => process\Monitor::class,
         'reloadable' => false,
         'constructor' => [
-            'monitor_dir' => array_merge(
+            'monitorDir' => array_merge(
                 [
                     app_path(),
                     config_path(),
@@ -31,13 +32,13 @@ return [
                 glob(base_path() . '/plugin/*/config'),
                 glob(base_path() . '/plugin/*/api')
             ),
-            'monitor_extensions' => [
+            'monitorExtensions' => [
                 'php', 'phtml', 'html', 'htm', 'env'
             ],
             'options' => [
                 'enable_file_monitor' => !Server::$daemonize && DIRECTORY_SEPARATOR === '/',
                 'enable_memory_monitor' => DIRECTORY_SEPARATOR === '/',
-            ],
+            ]
         ]
     ]
 ];

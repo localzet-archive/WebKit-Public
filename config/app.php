@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @package     Localzet Development Kit
- * @link        https://localzet.gitbook.io/
+ * @package     Triangle Framework (WebKit)
+ * @link        https://github.com/localzet/WebKit
+ * @link        https://github.com/Triangle-org/Framework
  * 
- * @author      Ivan Zorin (localzet) <creator@localzet.ru>
+ * @author      Ivan Zorin (localzet) <creator@localzet.com>
  * @copyright   Copyright (c) 2018-2022 Localzet Group
  * @license     https://www.localzet.com/license GNU GPLv3 License
  */
@@ -39,5 +40,15 @@ return [
         // 'author' => 'FirstName LastName (Nickname) <email>',
         // 'copyright' => 'Company',
         // 'reply_to' => 'Email',
+    ],
+    'headers' => [
+        'Content-Language' => 'ru',
+
+        'Access-Control-Allow-Origin' => '*',
+        'Access-Control-Allow-Credentials' => 'true',
+        'Access-Control-Allow-Methods' => '*',
+        'Access-Control-Allow-Headers' => '*',
+
+        'Server' => 'Triangle' . WEBCORE_VERSION,
     ],
 ];
