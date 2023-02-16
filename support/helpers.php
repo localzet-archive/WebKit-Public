@@ -26,8 +26,7 @@ use Twig\Error\SyntaxError;
 use localzet\FrameX\App;
 use localzet\FrameX\Config;
 use localzet\FrameX\Route;
-use localzet\Core\Server;
-
+use localzet\Server\Server;
 
 define('BASE_PATH', dirname(__DIR__));
 
@@ -39,7 +38,6 @@ define('WEBMAN_VERSION', '1.4.5');
 define('WEBCORE_VERSION', '2.0.0');
 define('WEBKIT_VERSION', '1.1.9');
 define('FRAMEX_VERSION', '1.2.9');
-
 
 /** 
  * @param string|null $connection

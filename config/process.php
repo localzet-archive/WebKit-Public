@@ -10,7 +10,7 @@
  * @license     https://www.localzet.com/license GNU GPLv3 License
  */
 
-use localzet\Core\Server;
+use localzet\Server\Server;
 
 return [
     'monitor' => [
