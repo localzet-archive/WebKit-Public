@@ -21,7 +21,7 @@
     },
     "require": {
         "php": ">=8.1",
-        "localzet/framex": ">=2.0.0"
+        "localzet/framex": "v2.2.0"
     },
     "suggest": {
         "ext-event": "For better performance. "

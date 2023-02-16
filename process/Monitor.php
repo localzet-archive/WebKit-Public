@@ -12,8 +12,8 @@
 
 namespace process;
 
-use localzet\Core\Timer;
-use localzet\Core\Server;
+use localzet\Server\Timer;
+use localzet\Server\Server;
 
 /**
  * Class FileMonitor
